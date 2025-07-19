@@ -1,0 +1,71 @@
+package de.example.landsystem;
+
+import de.example.landsystem.Main;
+import de.example.landsystem.SelectionManager;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+public class LandCreateCommand implements CommandExecutor {
+
+    private final Main plugin;
+    private final SelectionManager selectionManager;
+
+    public LandCreateCommand(Main plugin, SelectionManager selectionManager) {
+        this.plugin = plugin;
+        this.selectionManager = selectionManager;
+
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage("Nur Spieler können diesen Befehl ausführen.");
+            return true;
+        }
+
+        if (args.length != 1) {
+            player.sendMessage(ChatColor.RED + "Benutzung: /landcreate <Name>");
+            return true;
+        }
+
+        String landName = args[0];
+
+        // Überprüfen, ob Auswahl gesetzt ist
+        if (!selectionManager.hasBothPositions(player.getUniqueId())) {
+            player.sendMessage(ChatColor.RED + "Du musst zuerst zwei Positionen mit der Holzschaufel setzen!");
+            return true;
+        }
+
+
+        Location pos1 = selectionManager.getPos1(player.getUniqueId());
+        Location pos2 = selectionManager.getPos2(player.getUniqueId());
+        Location location = player.getLocation();
+        // Überprüfen, ob das Land bereits existiert
+        if (plugin.getConfig().contains("lands." + landName)) {
+            player.sendMessage(ChatColor.RED + "Ein Land mit diesem Namen existiert bereits.");
+            return true;
+        }
+        Land land = new Land(landName, player.getUniqueId(), location, 50, 100.0);
+        plugin.getLandManager().addLand(land);
+        player.sendMessage(ChatColor.GREEN + "Das Land '" + landName + "' wurde erfolgreich gegründet.");
+
+
+        land.addCitizen(player.getUniqueId());
+
+        // Speicher das Land
+        plugin.getConfig().set("lands." + landName + ".pos1", pos1);
+        plugin.getConfig().set("lands." + landName + ".pos2", pos2);
+        plugin.getConfig().set("lands." + landName + ".president", player.getUniqueId().toString());
+        plugin.getConfig().set("lands." + landName + ".citizens", java.util.Collections.singletonList(player.getUniqueId().toString()));
+
+        plugin.saveConfig();
+
+        player.sendMessage(ChatColor.GREEN + "Das Land §e" + landName + "§a wurde erfolgreich gegründet!");
+        return true;
+    }
+}

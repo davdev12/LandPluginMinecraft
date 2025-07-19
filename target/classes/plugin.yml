@@ -1,0 +1,51 @@
+name: LandSystem
+main: de.example.landsystem.Main
+version: 1.0
+api-version: 1.20
+author: Davbot12
+description: Ein Länderverwaltungssystem mit GUI, Abstimmungen und Vault-Unterstützung
+
+commands:
+  land:
+    description: Hauptbefehl für das Land-System
+    usage: /land <subcommand>
+    aliases: [lands, landlist, l, list]
+  landvote:
+    description: Stimme für oder gegen einen Staatsbürgerschaftsantrag
+    usage: /landvote <accept|deny> <Spielername> <Land>
+    aliases: [lv, lvote]
+  landpay:
+    description: Überweise Geld an ein Land
+    usage: /landpay <landname> <betrag>
+    aliases: [lp, lpay]
+  upgrade:
+    description: Erweitere das Land
+    usage: /upgrade
+    aliases: [lu, up, landupgrade, lupgrade]
+  landselect:
+    description: Erhalte das Land-Auswahlwerkzeug
+    usage: /landselect
+    aliases: [ls, lselect]
+  landalliance:
+    description: schickt allianzanfrage
+    usage: /landalliance
+    aliases: [la, lalliances, lally, ally, allies, allianz, lallianz]
+  landcreate:
+    description: Erstelle ein neues Land aus ausgewähltem Gebiet
+    aliases: [lc, lcreate]
+  leave:
+    description: verlässt dein land
+    aliases: [delete, verlassen, landleave, ll, lleave]
+  landcontrol:
+    description: Öffnet die Land-Kontroll-GUI
+    aliases: [lcontrol, kontrolle, control, lcon, con]
+  visum:
+    description: Beantragt ein Visum für ein Land
+    aliases: [v, vis, landvisum]
+permissions:
+  landsystem.use:
+    description: Grundrechte für das Land-System
+    default: true
+  landsystem.admin:
+    description: Adminrechte für das Land-System
+    default: op

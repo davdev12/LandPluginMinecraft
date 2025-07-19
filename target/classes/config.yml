@@ -1,0 +1,9 @@
+lands: {}
+
+requests: {}
+
+pendingVotes: {}
+
+settings:
+  expansionCostPerBlock: 1  # Anzahl der Diamanten pro Block beim Expandieren
+  defaultPresident: "Keiner"
