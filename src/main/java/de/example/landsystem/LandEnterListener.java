@@ -17,6 +17,10 @@ public class LandEnterListener implements Listener {
         this.plugin = plugin;
     }
 
+    public boolean areAllied(String land1, String land2) {
+        return false;
+    }
+
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
@@ -37,7 +41,20 @@ public class LandEnterListener implements Listener {
         UUID uuid = player.getUniqueId();
 
         // Ist Präsident oder Bürger → erlaubt
-        if (targetLand.getPresident().equals(uuid) || targetLand.isCitizen(uuid)) return;
+        // Wenn Spieler Visum hat → erlauben
+        if (hasValidVisa(player, targetLand.getName())) return;
+
+// Prüfen, ob Spieler aus verbündetem Land stammt
+        Land playerLand = plugin.getLandManager().getLandByCitizen(player.getUniqueId());
+        if (playerLand != null && plugin.getAllianceManager().areAllied(playerLand.getName(), targetLand.getName())) {
+            return; // Spieler ist aus verbündetem Land → erlauben
+        }
+
+// Kein Visum und keine Allianz → blockieren
+        Location eventFrom = event.getFrom();
+        player.teleport(from);
+        player.sendMessage("§cDu brauchst ein gültiges Visum oder musst aus einem verbündeten Land kommen, um §e" + targetLand.getName() + " §czu betreten.");
+
 
         // Hat Visum?
         if (hasValidVisa(player, targetLand.getName())) return;
