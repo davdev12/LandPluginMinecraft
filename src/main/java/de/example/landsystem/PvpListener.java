@@ -34,5 +34,15 @@ public class PvpListener implements Listener {
                 attacker.sendMessage("§cDein Land ist mit dem Ziel-Land verbündet.");
             }
         }
+        if (landA.equals(landB) || plugin.getAllianceManager().areAllied("landA", "landB")) {
+            e.setCancelled(true);
+            attacker.sendMessage("§cAngriffe auf Mitbürger oder Alliierte sind verboten.");
+            return;
+        }
+
+        if (!plugin.getWarManager().isAtWar(landA.getName(), landB.getName())) {
+            e.setCancelled(true);
+            attacker.sendMessage("§cDu kannst keine Spieler aus friedlichen Ländern angreifen.");
+        }
     }
 }

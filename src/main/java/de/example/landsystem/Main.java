@@ -22,6 +22,7 @@ public class Main extends JavaPlugin {
     private LandUpgradeHandler landUpgradeHandler;
     private Map<UUID, String> pendingVisaInput = new HashMap<>();
     private AllianceManager allianceManager;
+    private WarManager warManager;
     @Override
     public void onEnable() {
         instance = this;
@@ -37,12 +38,13 @@ public class Main extends JavaPlugin {
         selectionManager = new SelectionManager();
         this.landUpgradeHandler = new LandUpgradeHandler(this);
         this.pendingVisaInput = new HashMap<>();
+        this.warManager = new WarManager(this);
         // Commands initialisieren
         landUpgradeCommand = new LandUpgradeCommand(this);
 
         // Partikel Task starten
         new LandParticleBorderTask(this).runTaskTimer(this, 0L, 4L);
-
+        allianceManager = new AllianceManager(this);
         // Commands registrieren
         getCommand("landalliance").setExecutor(new LandAllianceCommand(this));
         getCommand("landcreate").setExecutor(new LandCreateCommand(this, selectionManager));
@@ -55,6 +57,7 @@ public class Main extends JavaPlugin {
         getCommand("landcontrol").setExecutor(new LandControlCommand(this));
         getCommand("visum").setExecutor(new VisumCommand(this));
         getServer().getPluginManager().registerEvents(new LandEnterListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new WarControlListener(this), this);
         Bukkit.getPluginManager().registerEvents(new VisumInputListener(this), this);
         Bukkit.getPluginManager().registerEvents(new LandGUIListener(this), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(this), this);
@@ -73,7 +76,6 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         getLogger().info("LandSystem wurde deaktiviert.");
     }
-
     // Economy Setup (Vault)
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
@@ -129,5 +131,9 @@ public class Main extends JavaPlugin {
     }
     public static Main getInstance() {
         return instance;
+    }
+
+    public WarManager getWarManager() {
+        return warManager;
     }
 }

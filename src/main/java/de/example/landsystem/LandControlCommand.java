@@ -77,6 +77,18 @@ public class LandControlCommand implements CommandExecutor {
         allianceItem.setItemMeta(allianceMeta);
         gui.setItem(2, allianceItem);
 
+        ItemStack warItem = new ItemStack(Material.IRON_SWORD);
+        ItemMeta warMeta = warItem.getItemMeta();
+        warMeta.setDisplayName("§cKriege");
+        warMeta.setLore(Collections.singletonList("§7Klicke, um Krieg anzufangen"));
+        warMeta.getPersistentDataContainer().set(
+                new NamespacedKey(plugin, "landcontrol_action"),
+                PersistentDataType.STRING,
+                "war:" + land.getName()
+        );
+        warItem.setItemMeta(warMeta);
+        gui.setItem(3, warItem);
+
         player.openInventory(gui);
         return true;
     }

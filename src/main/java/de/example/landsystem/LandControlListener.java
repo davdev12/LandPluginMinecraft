@@ -51,8 +51,11 @@ public class LandControlListener implements Listener {
             } else if (action.startsWith("alliances:")) {
             String landName = action.substring("alliances:".length());
             new AllianceGUI(plugin, player, landName).open();
-        }
-    });
+            } else if (action.startsWith("war:")) {
+                String landName = action.substring("war:".length());
+                openWarGui(player, landName);
+            }
+        });
     }
 
     private void openAllianceGUI(Player player, String landName) {
@@ -76,5 +79,25 @@ public class LandControlListener implements Listener {
 
         player.openInventory(inv);
     }
+    private void openWarGui(Player player, String landName) {
+        Inventory warGui = Bukkit.createInventory(null, 9, "§4Krieg gegen...");
+        var allies = plugin.getAllianceManager().getAllies(landName);
+
+        int slot = 0;
+        for (String ally : allies) {
+            ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+            var meta = skull.getItemMeta();
+            meta.setDisplayName("§c" + ally);
+            meta.getPersistentDataContainer().set(
+                    new NamespacedKey(plugin, "landcontrol_action"),
+                    PersistentDataType.STRING,
+                    "declarewar:" + landName + ":" + ally
+            );
+            skull.setItemMeta(meta);
+            warGui.setItem(slot++, skull);
+        }
+        player.openInventory(warGui);
+    }
+
 
 }

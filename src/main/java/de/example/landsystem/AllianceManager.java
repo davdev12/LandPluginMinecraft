@@ -1,8 +1,12 @@
 package de.example.landsystem;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AllianceManager {
 
@@ -22,6 +26,16 @@ public class AllianceManager {
         config.set("alliances." + landA + "." + landB, allied);
         config.set("alliances." + landB + "." + landA, allied);
         plugin.saveConfig();
+    }
+    public void removeAlliance(String landA, String landB) {
+        plugin.getConfig().set("alliances." + landA + "." + landB, null);
+        plugin.getConfig().set("alliances." + landB + "." + landA, null);
+        plugin.saveConfig();
+    }
+    public List<String> getAllies(String land) {
+        ConfigurationSection section = plugin.getConfig().getConfigurationSection("alliances." + land);
+        if (section == null) return new ArrayList<>();
+        return new ArrayList<>(section.getKeys(false));
     }
 
     public void sendAllianceRequest(Player requester, String fromLand, String toLand) {
