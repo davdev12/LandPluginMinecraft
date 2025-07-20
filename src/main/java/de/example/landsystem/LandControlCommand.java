@@ -68,6 +68,7 @@ public class LandControlCommand implements CommandExecutor {
         ItemStack allianceItem = new ItemStack(Material.GOLDEN_CHESTPLATE);
         ItemMeta allianceMeta = allianceItem.getItemMeta();
         allianceMeta.setDisplayName("§6Allianzen verwalten");
+        upgradeMeta.setLore(Collections.singletonList("§7Klicke, um Allianzen zu schließen"));
         allianceMeta.getPersistentDataContainer().set(
                 new NamespacedKey(plugin, "landcontrol_action"),
                 PersistentDataType.STRING,
