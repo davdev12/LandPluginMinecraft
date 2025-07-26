@@ -23,7 +23,7 @@ public class Land {
     private Location center;
     private int radius;
     private double borderSize;
-
+    private LandRegion region;
     // Zum Speichern von Border-Block-Locations (z.B. für spezielle Blöcke an Rand)
     private final Set<String> borderBlockLocations = new HashSet<>();
 
