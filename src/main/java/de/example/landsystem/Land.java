@@ -135,7 +135,9 @@ public class Land {
     public int getRadius() {
         return radius;
     }
-
+    public LandRegion getRegion() {
+        return region; // <-- diese Methode wird im LandManager gebraucht
+    }
     public void setRadius(int radius) {
         this.radius = radius;
     }

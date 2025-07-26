@@ -1,5 +1,7 @@
 package de.example.landsystem;
 
+import org.bukkit.Location;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -15,6 +17,15 @@ public class LandManager {
 
     public void addLand(Land land) {
         lands.put(land.getName().toLowerCase(), land);
+    }
+    public Land getLandAt(Location loc) {
+        ChunkPosition chunk = new ChunkPosition(loc.getChunk());
+        for (Land land : lands.values()) {
+            if (land.getRegion().getChunks().contains(chunk)) {
+                return land;
+            }
+        }
+        return null;
     }
 
     public Land getLand(String name) {
